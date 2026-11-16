@@ -1004,6 +1004,10 @@
                 <button class="mini-action-btn" id="openTroubleshootingBtn" type="button">View</button>
             </div>
             <div class="setting-row">
+                <span>Force Refresh</span>
+                <button class="mini-action-btn" id="forceRefreshBtn" type="button">Reload</button>
+            </div>
+            <div class="setting-row">
                 <span>Low-RAM Protection</span>
                 <button class="mini-action-btn" id="lowRamToggleBtn" type="button">Auto (Normal)</button>
             </div>
@@ -1434,6 +1438,48 @@
                     creditsModal.classList.remove("open");
                 }
             });
+
+            var forceRefreshBtn = document.getElementById("forceRefreshBtn");
+            if (forceRefreshBtn) {
+                forceRefreshBtn.addEventListener("click", function () {
+                    forceRefreshBtn.textContent = "Updating...";
+                    forceRefreshBtn.disabled = true;
+
+                    function bustAndReload() {
+                        var base = window.location.href.split("?")[0].split("#")[0];
+                        window.location.replace(base + "?_v=" + Date.now());
+                    }
+
+                    // Clear CacheStorage if available
+                    try {
+                        if (window.caches && window.caches.keys) {
+                            window.caches.keys().then(function (keys) {
+                                for (var i = 0; i < keys.length; i++) {
+                                    window.caches.delete(keys[i]);
+                                }
+                            });
+                        }
+                    } catch (e) {}
+
+                    // Trigger iOS 12 AppCache update if active
+                    try {
+                        var appCache = window.applicationCache;
+                        if (appCache && appCache.status !== 0) {
+                            appCache.addEventListener("updateready", function () {
+                                try { appCache.swapCache(); } catch (e) {}
+                                bustAndReload();
+                            });
+                            appCache.addEventListener("noupdate", bustAndReload);
+                            appCache.addEventListener("error", bustAndReload);
+                            appCache.update();
+                            setTimeout(bustAndReload, 1500);
+                            return;
+                        }
+                    } catch (e) {}
+
+                    setTimeout(bustAndReload, 200);
+                });
+            }
         })();
     </script>
 </body>
