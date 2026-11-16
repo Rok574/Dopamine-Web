@@ -194,6 +194,8 @@
             padding: 28px 34px;
             padding-top: calc(46px + env(safe-area-inset-top));
             padding-bottom: calc(36px + env(safe-area-inset-bottom));
+            -webkit-transition: opacity 0.32s ease, -webkit-transform 0.32s ease;
+            transition: opacity 0.32s ease, transform 0.32s ease;
         }
 
         /* Left-aligned Dopamine Header */
@@ -204,14 +206,21 @@
             transition: opacity 0.35s ease;
         }
 
-       .dopamine-title {
-    margin: 0 0 8px 0;
-    font-size: 38px;
-    font-weight: 700;
-    letter-spacing: -0.6px;
-    line-height: 1.08;
-    color: #ffffff;
-}
+        .dopamine-title {
+            margin: 0 0 8px 0;
+            font-size: 38px;
+            font-weight: 700;
+            letter-spacing: -0.6px;
+            line-height: 1.08;
+            color: #ffffff;
+        }
+
+        .dopamine-icon {
+            width: 260px;
+            height: auto;
+            display: block;
+            margin-bottom: 8px;
+        }
 
         .dopamine-sub {
             margin: 0 0 4px 0;
@@ -335,14 +344,19 @@
             justify-content: center;
             -webkit-appearance: none;
             appearance: none;
-            -webkit-transition: background 0.15s ease, -webkit-transform 0.12s ease;
-            transition: background 0.15s ease, transform 0.12s ease;
+            -webkit-transition: background 0.15s ease, opacity 0.2s ease, -webkit-transform 0.12s ease;
+            transition: background 0.15s ease, opacity 0.2s ease, transform 0.12s ease;
         }
 
-        .jb-btn:active {
+        .jb-btn:active:not(:disabled) {
             background: var(--btn-bg-active);
             -webkit-transform: scale(0.985);
             transform: scale(0.985);
+        }
+
+        .jb-btn:disabled {
+            opacity: 0.55;
+            cursor: default;
         }
 
         .lock-icon {
@@ -354,11 +368,6 @@
         /* =========================================================
            ACTIVE JAILBREAKING OVERLAY (GPU-animated for iOS 12)
            ========================================================= */
-        .app-shell {
-            -webkit-transition: opacity 0.32s ease, -webkit-transform 0.32s ease;
-            transition: opacity 0.32s ease, transform 0.32s ease;
-        }
-
         .jb-overlay {
             position: fixed;
             top: 0;
@@ -725,6 +734,19 @@
             font-size: 14px;
         }
 
+        .mini-action-btn {
+            background: rgba(255, 255, 255, 0.14);
+            border: none;
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
         .theme-grid {
             display: -webkit-box;
             display: -webkit-flex;
@@ -769,12 +791,22 @@
             font-size: 12.5px;
             color: var(--text-muted);
             margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .credit-role code {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: "SF Mono", Menlo, monospace;
+            font-size: 11.5px;
+            color: #ffffff;
         }
 
         .source-link {
             display: block;
             text-align: center;
-            margin-top: 12px;
+            margin-top: 10px;
             padding: 11px 14px;
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.12);
@@ -784,12 +816,53 @@
             font-weight: 600;
         }
 
-.dopamine-icon {
-  width: 260px;
-  height: auto;
-  display: block;
-  margin-bottom: 8px;
-}
+        /* =========================================================
+           Low-RAM / High-Memory-Pressure Mode (iOS 12 Jetsam safe)
+           ========================================================= */
+        body.low-ram-mode .orb {
+            display: none !important;
+            -webkit-animation: none !important;
+            animation: none !important;
+        }
+
+        body.low-ram-mode .menu-card,
+        body.low-ram-mode .jb-btn,
+        body.low-ram-mode .jb-sheet,
+        body.low-ram-mode .modal-backdrop,
+        body.low-ram-mode .modal-sheet {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            -webkit-transition: none !important;
+            transition: none !important;
+        }
+
+        body.low-ram-mode .menu-card {
+            background: rgba(12, 34, 38, 0.72);
+        }
+
+        body.low-ram-mode .jb-sheet {
+            background: rgba(8, 28, 32, 0.78);
+        }
+
+        body.low-ram-mode .step-item,
+        body.low-ram-mode .step-item.depth-2,
+        body.low-ram-mode .step-item.depth-3 {
+            -webkit-filter: none !important;
+            filter: none !important;
+            -webkit-animation: none !important;
+            animation: none !important;
+            -webkit-transition: none !important;
+            transition: none !important;
+        }
+
+        body.low-ram-mode .w-dot,
+        body.low-ram-mode .app-shell,
+        body.low-ram-mode .jb-overlay {
+            -webkit-animation: none !important;
+            animation: none !important;
+            -webkit-transition: none !important;
+            transition: none !important;
+        }
     </style>
 </head>
 <body>
@@ -801,7 +874,7 @@
     <!-- Main Idle Screen -->
     <div class="app-shell">
         <div class="header-block">
-            <h1 class="dopamine-title"> <img src="Dopamine@2x.png" alt="" class="dopamine-icon"> </h1>
+            <h1 class="dopamine-title"><img src="Dopamine@2x.png" alt="Dopamine" class="dopamine-icon"></h1>
             <p class="dopamine-sub">iOS 12.0 - 12.5.x | A7 - A10</p>
             <p class="dopamine-meta">by Skylight</p>
             <p class="dopamine-meta">UI by sourceloc</p>
@@ -860,20 +933,19 @@
         </div>
 
         <div class="bottom-area">
-            <button id="jbButton" class="jb-btn" type="button">
+            <button id="jbButton" class="jb-btn" type="button" disabled>
                 <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                     <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
                 </svg>
-                <span>Jailbreak</span>
+                <span id="jbBtnText">JavaScript Disabled</span>
             </button>
         </div>
     </div>
 
-   
     <div class="jb-overlay" id="jbOverlay">
         <div class="jb-overlay-header">
-         <h1 class="dopamine-title"> <img src="Dopamine@2x.png" alt="" class="dopamine-icon"> </h1>
+            <h1 class="dopamine-title"><img src="Dopamine@2x.png" alt="Dopamine" class="dopamine-icon"></h1>
             <p class="dopamine-sub">iOS 12.0 - 12.5.x | A7 - A10</p>
             <p class="dopamine-meta">by Skylight</p>
             <p class="dopamine-meta">UI by sourceloc</p>
@@ -924,8 +996,58 @@
                 </div>
             </div>
             <div class="setting-row">
+                <span>Device Support</span>
+                <span id="deviceSupportStatus" style="color: var(--text-muted);">Checking...</span>
+            </div>
+            <div class="setting-row">
+                <span>Troubleshooting</span>
+                <button class="mini-action-btn" id="openTroubleshootingBtn" type="button">View</button>
+            </div>
+            <div class="setting-row">
+                <span>Low-RAM Protection</span>
+                <button class="mini-action-btn" id="lowRamToggleBtn" type="button">Auto (Normal)</button>
+            </div>
+            <div class="setting-row">
                 <span>Build</span>
                 <span style="color: var(--text-muted);">unknown</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Troubleshooting Modal -->
+    <div class="modal-backdrop" id="troubleshootingModal">
+        <div class="modal-sheet">
+            <div class="modal-head">
+                <h2 class="modal-title">Troubleshooting</h2>
+                <button class="close-btn" id="closeTroubleshootingBtn" type="button">&times;</button>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">Manually reloading the web app</div>
+                <div class="credit-role">While in the web app, hold the Top/Side button until "slide to power off" appears, then hold the Home button until you reach the Home Screen.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">"A problem repeatedly occurred..."</div>
+                <div class="credit-role">In Safari, reload the page. In the Home Screen web app, force-reload it as above or restart your device.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">Reboots to Apple logo after "Jailbreaking..."</div>
+                <div class="credit-role">Leave your device powered on and unlocked for ~30–60 seconds before retrying; it can take multiple attempts.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">Failed, retry?</div>
+                <div class="credit-role">Often happens if you're already jailbroken. Refresh the page, reload the web app, or restart your device.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">Site updates not showing</div>
+                <div class="credit-role">Reload the web app or go to Settings &gt; Safari &gt; Clear History and Website Data.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">Removing problematic tweaks</div>
+                <div class="credit-role">Set NVRAM <code>boot-args</code> to <code>-safe-mode</code> via an SSH RAM disk or <code>irecovery</code> in Recovery mode.</div>
+            </div>
+            <div class="credit-item">
+                <div class="credit-name">JavaScript Disabled</div>
+                <div class="credit-role">Go to Settings &gt; Safari &gt; Advanced and toggle JavaScript on, and use Safari instead of a 3rd-party browser.</div>
             </div>
         </div>
     </div>
@@ -965,27 +1087,110 @@
                 <div class="credit-name">forcequit</div>
                 <div class="credit-role">Some Scripts and stuff</div>
             </div>
-            <a class="source-link" href="https://github.com/wh1te4ever/totally-not-spyware-v2" target="_blank" rel="noopener">Source Code on GitHub</a>
+            <a class="source-link" href="https://github.com/wh1te4ever/totally-not-spyware-v2" target="_blank" rel="noopener noreferrer">Original Source Code</a>
+            <a class="source-link" href="https://github.com/forcequitOS/TotallyNotSpyware12" target="_blank" rel="noopener noreferrer">TotallyNotSpyware12 Source</a>
         </div>
     </div>
 
     <script>
         /* =========================================================
-           2. Dopamine UI Logic, Step Checklist & TNSv2 Integration
+           Dopamine UI Logic, Device Check, Timeout & TNSv2 Integration
            ========================================================= */
         (function () {
             var stepLogList = document.getElementById("stepLogList");
             var jbButton = document.getElementById("jbButton");
+            var jbBtnText = document.getElementById("jbBtnText");
             var jbBackBtn = document.getElementById("jbBackBtn");
             var jbStatusTitle = document.getElementById("jbStatusTitle");
+            var deviceSupportStatus = document.getElementById("deviceSupportStatus");
             var settingsModal = document.getElementById("settingsModal");
+            var troubleshootingModal = document.getElementById("troubleshootingModal");
             var creditsModal = document.getElementById("creditsModal");
 
             var isRunning = false;
+            var failTimer = null;
             var currentActiveStep = null;
+            var lowRamMode = "auto"; // "auto" | "on" | "off"
+            var lowRamToggleBtn = document.getElementById("lowRamToggleBtn");
+
+            function setLowRamActive(active, reason) {
+                if (active) {
+                    document.body.classList.add("low-ram-mode");
+                } else {
+                    document.body.classList.remove("low-ram-mode");
+                }
+                if (lowRamToggleBtn) {
+                    if (lowRamMode === "on") {
+                        lowRamToggleBtn.textContent = "Forced On";
+                    } else if (lowRamMode === "off") {
+                        lowRamToggleBtn.textContent = "Off";
+                    } else {
+                        lowRamToggleBtn.textContent = active ? ("Auto (" + (reason || "Active") + ")") : "Auto (Normal)";
+                    }
+                }
+            }
+
+            if (lowRamToggleBtn) {
+                lowRamToggleBtn.addEventListener("click", function () {
+                    if (lowRamMode === "auto") {
+                        lowRamMode = "on";
+                        setLowRamActive(true, "Forced");
+                    } else if (lowRamMode === "on") {
+                        lowRamMode = "off";
+                        setLowRamActive(false);
+                    } else {
+                        lowRamMode = "auto";
+                        setLowRamActive(false);
+                    }
+                });
+            }
+
+            // Detect high RAM / GC pressure via performance.memory (if available) + frame-stall monitor
+            var lastTick = Date.now();
+            var stallStrikes = 0;
+            setInterval(function () {
+                if (lowRamMode !== "auto") {
+                    return;
+                }
+                var now = Date.now();
+                var delta = now - lastTick;
+                lastTick = now;
+
+                var highHeap = false;
+                if (window.performance && window.performance.memory && window.performance.memory.jsHeapSizeLimit) {
+                    var ratio = window.performance.memory.usedJSHeapSize / window.performance.memory.jsHeapSizeLimit;
+                    if (ratio > 0.65) {
+                        highHeap = true;
+                    }
+                }
+
+                // A >450ms stall on a 250ms timer indicates heavy GC / memory pressure
+                if (delta > 450 || highHeap) {
+                    stallStrikes++;
+                    if (stallStrikes >= 2) {
+                        setLowRamActive(true, highHeap ? "High RAM" : "Pressure");
+                    }
+                } else if (!isRunning && stallStrikes > 0) {
+                    stallStrikes--;
+                }
+            }, 250);
 
             var checkSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
             var errSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+            // Device & iOS 12 detection (matching TotallyNotSpyware12)
+            var isSupportedDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) && /OS 12_/.test(navigator.userAgent);
+            if (isSupportedDevice) {
+                jbBtnText.textContent = "Jailbreak";
+                jbButton.disabled = false;
+                deviceSupportStatus.textContent = "iOS 12 Supported";
+                deviceSupportStatus.style.color = "var(--accent)";
+            } else {
+                jbBtnText.textContent = "Unsupported";
+                jbButton.disabled = true;
+                deviceSupportStatus.textContent = "Unsupported (Not iOS 12)";
+                deviceSupportStatus.style.color = "#fca5a5";
+            }
 
             function pushStep(text, isError) {
                 if (currentActiveStep) {
@@ -1027,6 +1232,18 @@
                 }
 
                 currentActiveStep = isError ? null : item;
+            }
+
+            function finishWithFailure(statusText, stepText) {
+                if (failTimer) {
+                    clearTimeout(failTimer);
+                    failTimer = null;
+                }
+                pushStep(stepText, true);
+                jbStatusTitle.textContent = statusText;
+                jbBtnText.textContent = "Failed, retry?";
+                jbButton.disabled = false;
+                isRunning = false;
             }
 
             window.log = function (msg) {
@@ -1105,10 +1322,12 @@
             }
 
             window.rejb = function () {
-                if (isRunning) {
+                if (isRunning || !isSupportedDevice) {
                     return;
                 }
                 isRunning = true;
+                jbButton.disabled = true;
+                jbBtnText.textContent = "Jailbreaking...";
                 stepLogList.innerHTML = "";
                 currentActiveStep = null;
                 jbStatusTitle.textContent = "Jailbreaking";
@@ -1116,8 +1335,20 @@
 
                 pushStep("Initializing WebKit", false);
 
+                if (failTimer) {
+                    clearTimeout(failTimer);
+                }
+                failTimer = setTimeout(function () {
+                    if (isRunning) {
+                        finishWithFailure("Failed, retry?", "Timed out — device may already be jailbroken. Tap Hide and retry or reboot.");
+                    }
+                }, 6500);
+
                 setTimeout(function () {
                     if (typeof window.pwn === "function") {
+                        if (lowRamMode === "auto") {
+                            setLowRamActive(true, "Exploit");
+                        }
                         pushStep("Building JOP Chain", false);
                         setTimeout(function () {
                             try {
@@ -1125,28 +1356,30 @@
                             } catch (err) {
                                 var msg = err && err.message ? err.message : String(err);
                                 if (msg.indexOf("represented by a double") !== -1) {
-                                    pushStep("Already jailbroken (or WebKit state dirty) — reboot first if you need to re-jailbreak.", true);
-                                    jbStatusTitle.textContent = "Already Jailbroken?";
+                                    finishWithFailure("Already Jailbroken?", "Already jailbroken (or WebKit state dirty) — reboot first if you need to re-jailbreak.");
                                 } else {
-                                    pushStep("Failed: " + msg, true);
-                                    jbStatusTitle.textContent = "Failed";
+                                    finishWithFailure("Failed, retry?", "Failed: " + msg);
                                 }
-                                isRunning = false;
                             }
-                        }, 80);
+                        }, 100);
                     } else {
-                        setTimeout(function () { pushStep("Exploiting WebKit", false); }, 550);
-                        setTimeout(function () { pushStep("Building JOP Chain", false); }, 1150);
-                        setTimeout(function () { pushStep("pwn.js not loaded in preview", true); jbStatusTitle.textContent = "Preview"; isRunning = false; }, 1850);
+                        finishWithFailure("Failed, retry?", "pwn.js not loaded.");
                     }
-                }, 250);
+                }, 150);
             };
 
             jbButton.addEventListener("click", window.rejb);
 
             jbBackBtn.addEventListener("click", function () {
+                if (failTimer) {
+                    clearTimeout(failTimer);
+                    failTimer = null;
+                }
                 document.body.classList.remove("is-jailbreaking");
                 isRunning = false;
+                if (isSupportedDevice) {
+                    jbButton.disabled = false;
+                }
             });
 
             document.getElementById("respringBtn").addEventListener("click", function () {
@@ -1174,6 +1407,19 @@
             settingsModal.addEventListener("click", function (e) {
                 if (e.target === settingsModal) {
                     settingsModal.classList.remove("open");
+                }
+            });
+
+            document.getElementById("openTroubleshootingBtn").addEventListener("click", function () {
+                settingsModal.classList.remove("open");
+                troubleshootingModal.classList.add("open");
+            });
+            document.getElementById("closeTroubleshootingBtn").addEventListener("click", function () {
+                troubleshootingModal.classList.remove("open");
+            });
+            troubleshootingModal.addEventListener("click", function (e) {
+                if (e.target === troubleshootingModal) {
+                    troubleshootingModal.classList.remove("open");
                 }
             });
 
